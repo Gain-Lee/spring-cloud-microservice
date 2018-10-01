@@ -1,0 +1,17 @@
+management:
+  #  server:
+  #  port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: env,beans,mappings
+#        include: “*”
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultzone: http://192.168.0.96:8761/eureka/
