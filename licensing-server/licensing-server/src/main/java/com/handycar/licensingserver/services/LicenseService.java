@@ -1,6 +1,6 @@
 package com.handycar.licensingserver.services;
 
-import com.handycar.licensingserver.clients.OrganizationDiscoveryClient;
+import com.handycar.licensingserver.clients.OrganizationRestTemplateClient;
 import com.handycar.licensingserver.config.ServiceConfig;
 import com.handycar.licensingserver.model.License;
 import com.handycar.licensingserver.model.Organization;
@@ -18,13 +18,13 @@ public class LicenseService {
     private LicenseRepository licenseRepository;
 
     @Autowired
-    private OrganizationDiscoveryClient organizationDiscoveryClient;
+    private OrganizationRestTemplateClient organizationRestClient;
 
     @Autowired
     ServiceConfig config;
 
     public License getLicense(String organizationId,String licenseId) {
-        Organization organization = organizationDiscoveryClient.getOrganizaion(organizationId);
+        Organization organization = organizationRestClient.getOrganizaion(organizationId);
 
         License license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
         return license
