@@ -10,6 +10,7 @@ import com.netflix.ribbon.proxy.annotation.Hystrix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -39,11 +40,24 @@ public class LicenseService {
                 .withComment(config.getExampleProperty());
     }
 
-    @HystrixCommand
+    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList")
     public List<License> getLicensesByOrg(String organizationId){
         randomlyRunLong();
 
         return licenseRepository.findByOrganizationId( organizationId );
+    }
+
+    private List<License> buildFallbackLicenseList(String organizationId) {
+        List<License> fallbackList = new ArrayList<>();
+
+        License license = new License()
+                .withId("000000-00-00000")
+                .withOrganizationId(organizationId)
+                .withProductName("Sorry no licensing information currently available");
+
+        fallbackList.add(license);
+
+        return fallbackList;
     }
 
     private void randomlyRunLong() {
